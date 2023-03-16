@@ -1,0 +1,23 @@
+1. NEED TO BE FIXED:
+
+- Frame time? //is it too fast?.....
+- Efficient way to generate numerous number of food and falling at RANDOM TIME AND SEPERATELY
+- (Optional?) Fix the hover button bug
+
+
+2. NEED TO BE ADDED:
+
+- Level system (Optional: Add more level)
+    + Food (faster) //Done but need to re-check
+    + Basket (faster)
+- Score (Store highest score also) //done but need to render to screen and add store highest score
+- Menu screen
+    + Play //Play
+    + How to play //Infor
+    + Story(?) //Game
+    + Credit //About
+- Game over screen
+    + Optional: Play again
+- Sound effect
+- Render score and lives to screen
+- Add decorations
