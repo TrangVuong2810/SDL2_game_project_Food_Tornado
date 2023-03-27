@@ -3,12 +3,10 @@
 #include <SDL_image.h>
 #include <SDL_ttf.h>
 
-#include "VectorMath.h"
 #include "RenderWindow.h"
 #include "Entity.h"
-#include "Background.h"
+#include "VectorMath.h"
 #include "Basket.h"
-#include "Food.h"
 
 Basket::~Basket() {
     cleanUp();

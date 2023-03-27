@@ -48,9 +48,9 @@ void Food::randomFoodRender(RenderWindow &p_window) {
 
     pos.setVectorMath((double)(rand() % 271 + 139), topDropBorder); //x from 139 to 409
 
-    temp = rand() % 4;
+    foodNum = rand() % 4;
 
-    foodEntities.push_back(Entity(pos, food[temp], loadFood));
+    foodEntities.push_back(Entity(pos, food[foodNum], loadFood));
 
     std::cout << "NEW FOOD: " << pos.x << " " << pos.y << std::endl;
 
@@ -63,15 +63,14 @@ VectorMath Food::getFoodPos() {
 
 void Food::foodDrop (RenderWindow &p_window, const bool &p_check, int &p_level) {
     cleanUp();
-
     if (loadFood == nullptr) loadFoodTexture(p_window);
 
-    if (temp == -1) randomFoodRender(p_window);
+    if (foodNum == -1) randomFoodRender(p_window);
     if (p_check) {
-        if (p_level == 1) pos.y += 2;
-        else if (p_level == 2) pos.y += 3;
-        else pos.y += 5;
-        foodEntities.push_back(Entity(pos, food[temp], loadFood));
+        if (p_level == 1) pos.y += 1;
+        else if (p_level == 2) pos.y += 2;
+        else pos.y += 3;
+        foodEntities.push_back(Entity(pos, food[foodNum], loadFood));
         foodRender(p_window, foodRatio);
     }
     else {
@@ -87,47 +86,3 @@ void Food::cleanUp() {
     clearVectors();
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
- void Enemy::Update()
-{
-    Timer += Timer->GetTimeElapsed();
-    int Random = (rand() % 4);
-    if (Timer >= 2.0)
-    {
-        switch (Random)
-        {
-        case(0):
-            m_xPos += 10.0 * Timer->tElapsed();
-        case(1):
-            m_xPos -= 10.0  * Timer->tElapsed();
-        case(2):
-            m_yPos -= 10.0  * Timer->tElapsed();
-        case(3):
-            m_yPos += 10.0  * Timer->tElapsed();
-        }
-    }
-}
-
-
-
-
-*/

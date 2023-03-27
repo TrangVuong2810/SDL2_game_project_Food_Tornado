@@ -5,11 +5,7 @@
 
 #include "RenderWindow.h"
 #include "Entity.h"
-#include "Background.h"
 #include "VectorMath.h"
-#include "Food.h"
-#include "Basket.h"
-#include "Text.h"
 #include "Button.h"
 
 Button::Button()
@@ -69,9 +65,12 @@ bool Button::isInside(SDL_Event &e)
 	return false;
 }
 
-Entity Button::buttonEntity(const SDL_Rect& currentClip, RenderWindow& p_window)
-{
-	 return Entity(position, currentClip, loadButton);
+Entity Button::buttonEntity() {
+    if (currentSprite == BUTTON_MOUSE_OVER) {
+        return Entity(position, menuButtonsHover, loadButton);
+    }
+    else return Entity(position, menuButtons, loadButton);
+
 }
 
 void Button::loadMedia(RenderWindow& p_window, const char* p_filePath) {

@@ -5,26 +5,16 @@
 #include <SDL_image.h>
 #include <SDL_ttf.h>
 
-//#include "RenderWindow.h"
+#include "RenderWindow.h"
 #include "Entity.h"
 #include "Background.h"
 #include "VectorMath.h"
-//#include "Basket.h"
-//#include "Mechanism.h"
-//#include "Text.h"
-
-//class Background;
-class RenderWindow;
-
-
 
 const double SCREEN_WIDTH = 800;
 const double HALF_SCREEN_WIDTH = 400;
 const double SCREEN_HEIGHT = 600;
 const double HALF_SCREEN_HEIGHT = 300;
 const std::string WINDOW_TITLE = "Food Tornado";
-
-
 
 
 const double leftBorder = 75;
@@ -90,9 +80,10 @@ private:
     std::vector<Entity> foodEntities;
     SDL_Texture* loadFood = nullptr;
     VectorMath pos;
-    int temp = -1;
+    int foodNum = -1;
 public:
     ~Food();
+
     void cleanUp();
     void clearVectors();
     VectorMath getFoodPos();

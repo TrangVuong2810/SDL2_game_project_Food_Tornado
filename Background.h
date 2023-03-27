@@ -8,10 +8,7 @@
 #include "RenderWindow.h"
 #include "Entity.h"
 #include "VectorMath.h"
-#include "Basket.h"
-#include "Mechanism.h"
-//#include "Text.h"
-#include "Food.h"
+#include "Menu.h"
 
 /*
 const double leftBorder = 75;
@@ -65,6 +62,7 @@ private:
     std::vector<Entity> backgroundEntities;
     SDL_Texture* loadBackground = nullptr;
 public:
+    //Background() {};
     ~Background();
     void clearVector();
     void cleanBackground();

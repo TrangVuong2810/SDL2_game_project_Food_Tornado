@@ -35,8 +35,12 @@
 		<Unit filename="Background.h" />
 		<Unit filename="Basket.cpp" />
 		<Unit filename="Basket.h" />
+		<Unit filename="Bear.cpp" />
+		<Unit filename="Bear.h" />
 		<Unit filename="Button.cpp" />
 		<Unit filename="Button.h" />
+		<Unit filename="Cow.cpp" />
+		<Unit filename="Cow.h" />
 		<Unit filename="Entity.cpp" />
 		<Unit filename="Entity.h" />
 		<Unit filename="Food.cpp" />
@@ -47,8 +51,6 @@
 		<Unit filename="Menu.h" />
 		<Unit filename="RenderWindow.cpp" />
 		<Unit filename="RenderWindow.h" />
-		<Unit filename="Text.cpp" />
-		<Unit filename="Text.h" />
 		<Unit filename="VectorMath.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="note.txt" />

@@ -2,6 +2,7 @@
 #include <SDL.h>
 #include <SDL_image.h>
 #include <SDL_ttf.h>
+#include <SDL_mixer.h>
 
 #include "RenderWindow.h"
 #include "Entity.h"
@@ -33,8 +34,13 @@ int main (int argc, char* argv[]) {
     if( TTF_Init() == -1 ) {
         std::cout << "SDL_ttf could not initialize! SDL_ttf Error: " << TTF_GetError() << std::endl;
     }
+    if( Mix_OpenAudio( 44100, MIX_DEFAULT_FORMAT, 2, 2048 ) < 0 ) {
+        std::cout << "SDL_mixer could not initialize! SDL_mixer Error: " << Mix_GetError() << std::endl;
+    }
 
     RenderWindow window(WINDOW_TITLE.c_str(), SCREEN_WIDTH, SCREEN_HEIGHT);
+
+    window.loadMusic();
 
     Mechanism mechanism;
 
@@ -51,6 +57,7 @@ int main (int argc, char* argv[]) {
     TTF_Quit();
     IMG_Quit();
     SDL_Quit();
+    Mix_Quit();
 
     return 0;
 }

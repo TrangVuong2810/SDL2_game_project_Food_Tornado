@@ -34,18 +34,27 @@ SDL_Texture* RenderWindow::loadTexture (const char* _filePath) {
     return texture;
 }
 
-//int RenderWindow::getRefreshRate() {
-//  int displayIndex = SDL_GetWindowDisplayIndex(window);
-//  SDL_DisplayMode mode;
-//  SDL_GetDisplayMode(displayIndex, 0, &mode);
-//  return mode.refresh_rate;
-//}
-
-
 void RenderWindow::cleanUp() {
-    //text.close();
+
+    Mix_FreeChunk(menu_click);
+    Mix_FreeChunk(menu_back);
+    Mix_FreeChunk(dead);
+    Mix_FreeChunk(scored);
+    Mix_FreeChunk(missed);
+
+    menu_click = nullptr;
+    menu_back = nullptr;
+    dead = nullptr;
+    scored = nullptr;
+    missed = nullptr;
+
+    Mix_FreeMusic(music);
+    music = nullptr;
+
     SDL_DestroyRenderer(renderer);
+    renderer = nullptr;
     SDL_DestroyWindow(window);
+    window = nullptr;
 }
 
 void RenderWindow::_clear() {
@@ -68,57 +77,66 @@ void RenderWindow::render (Entity& p_entity, const double& p_ratio) {
     //SDL_RenderCopy(renderer, _texture, NULL, NULL);
     SDL_RenderCopy(renderer, p_entity.getTex(), &src, &dst);
 }
-/*
-Text RenderWindow::getText() {
-    return text;
+
+void RenderWindow::loadMusic() {
+	//Load music
+	music = Mix_LoadMUS( "Music.wav" );
+	if( music == nullptr ) {
+		std::cout << "Failed to load music! SDL_mixer Error: " << Mix_GetError() << std::endl ;
+	}
+
+	//Load sound effects
+	menu_click = Mix_LoadWAV( "Menu_Click.wav" );
+	if( menu_click == nullptr ) {
+		std::cout << "Failed to load menu_click sound effect! SDL_mixer Error: " << Mix_GetError() << std::endl ;
+	}
+
+	menu_back = Mix_LoadWAV( "Menu_back.wav" );
+	if( menu_back == nullptr ) {
+		std::cout << "Failed to load menu_back sound effect! SDL_mixer Error: " << Mix_GetError() << std::endl;
+	}
+
+	dead = Mix_LoadWAV( "Dead.wav" );
+	if( dead == nullptr ) {
+		std::cout << "Failed to load dead sound effect! SDL_mixer Error: " << Mix_GetError() << std::endl;
+	}
+
+	scored = Mix_LoadWAV( "Scored.wav" );
+	if( scored == nullptr ) {
+		std::cout << "Failed to load scored sound effect! SDL_mixer Error: " << Mix_GetError() << std::endl;
+	}
+
+	missed = Mix_LoadWAV( "Missed.wav" );
+	if( missed == nullptr ) {
+		std::cout << "Failed to load missed sound effect! SDL_mixer Error: " << Mix_GetError() << std::endl;
+
+	}
 }
-*/
-/*
-SDL_Renderer* RenderWindow::getRenderer() {
-    return renderer;
+
+Mix_Chunk* RenderWindow::getMix_Chunk(int soundIndex) {
+    switch (soundIndex) {
+    case 1:
+        std::cout << "OK" <<std::endl;
+        return menu_click;
+        break;
+    case 2:
+        return menu_back;
+        break;
+    case 3:
+        return dead;
+        break;
+    case 4:
+        return scored;
+        break;
+    case 5:
+        return missed;
+        break;
+    }
+    std::cout << "UHO" <<std::endl;
+    return nullptr;
 }
-*/
 
 void RenderWindow::display() {
     SDL_RenderPresent(renderer);
 }
-/*
-void RenderWindow::renderText(double x, double y, Entity &p_entity)
-{
 
-    if (!loadMedia()) {
-        std::cout << "Failed to load media - text" << std::endl;
-    }
-
-	const double temp = 1;
-	render(p_entity, temp);
-
-	//Render to screen
-    //display();
-}
-
-bool RenderWindow::loadMedia()
-{
-	//Loading success flag
-	bool success = true;
-
-	text.font = TTF_OpenFont( "Kaph-Regular.ttf", 28 );
-	if( text.font == NULL )
-	{
-		std::cout << "Failed to load font! SDL_ttf Error: " << TTF_GetError() << std::endl;
-		success = false;
-	}
-	else
-	{
-		SDL_Color textColor = {130, 69, 19};
-		if( !text.loadFromRenderedText( "The quick brown fox jumps over the lazy dog", textColor, renderer ) )
-		{
-			std::cout << "Failed to render text texture!" << std::endl;
-			success = false;
-		}
-	}
-
-	return success;
-}
-
-*/

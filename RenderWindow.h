@@ -1,15 +1,13 @@
 #pragma once
 
-#include <iostream>
+#include <bits/stdc++.h>
 #include <SDL.h>
 #include <SDL_image.h>
 #include <SDL_ttf.h>
+#include <SDL_mixer.h>
 
 #include "Entity.h"
-//#include "Background.h"
 #include "VectorMath.h"
-#include "Text.h"
-#include "Food.h"
 
 //using namespace std;
 
@@ -17,19 +15,26 @@ class RenderWindow {
 private:
     SDL_Window* window;
     SDL_Renderer* renderer;
-    //Text text;
+
+
+    Mix_Music* music = nullptr;
+
+    Mix_Chunk* menu_click = nullptr; //1
+    Mix_Chunk* menu_back = nullptr; //2
+
+    Mix_Chunk* dead = nullptr; //3
+    Mix_Chunk* scored = nullptr; //4
+    Mix_Chunk* missed = nullptr; //5
+
 public:
+
     ~RenderWindow();
     RenderWindow(const char* WINDOW_TITLE, int SCREEN_WIDTH, int SCREEN_HEIGHT);
     SDL_Texture* loadTexture(const char* _filePath);
 
-    //bool loadMedia();
-    //Text getText();
-    //SDL_Renderer* getRenderer();
-    //void renderText (double x, double y, Entity &p_entity);
+    void loadMusic();
+    Mix_Chunk* getMix_Chunk(int soundIndex);
 
-    //if the VSYNC doesnt work:
-    //int getRefreshRate();
     void cleanUp();
     void _clear();
     void render(Entity& p_entity, const double& p_ratio);

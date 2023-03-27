@@ -7,11 +7,8 @@
 
 #include "RenderWindow.h"
 #include "Entity.h"
-#include "Background.h"
 #include "VectorMath.h"
 #include "Food.h"
-#include "Mechanism.h"
-#include "Text.h"
 
 const SDL_Rect basket_rect = {16, 82, 16, 14};
 const double basketWidth = 16;
