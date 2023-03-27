@@ -30,15 +30,15 @@ void Bear::setPosition(double x, double y) {
 }
 
 void Bear::setBearSprite() {
-    if (currentSprite == BEAR_DEFAULT && cntSprite == 50) {
+    if (currentSprite == BEAR_DEFAULT && cntSprite == MAX_SPRITES) {
         currentSprite = BEAR_MOVE_1;
         cntSprite = 0;
     }
-    else if (currentSprite == BEAR_MOVE_1 && cntSprite == 50) {
+    else if (currentSprite == BEAR_MOVE_1 && cntSprite == MAX_SPRITES) {
         currentSprite = BEAR_MOVE_2;
         cntSprite = 0;
     }
-    else if (currentSprite == BEAR_MOVE_2 && cntSprite == 50) {
+    else if (currentSprite == BEAR_MOVE_2 && cntSprite == MAX_SPRITES) {
         currentSprite = BEAR_DEFAULT;
         cntSprite = 0;
     }

@@ -9,6 +9,8 @@
 #include "VectorMath.h"
 #include "RenderWindow.h"
 
+const int MAX_SPRITES = 45;
+
 const SDL_Rect bearRect1 = {1, 210, 37, 25};
 const SDL_Rect bearRect2 = {49, 210, 42, 25};
 const SDL_Rect bearRect3 = {98, 210, 37, 25};

@@ -136,6 +136,12 @@ Mix_Chunk* RenderWindow::getMix_Chunk(int soundIndex) {
     return nullptr;
 }
 
+void RenderWindow::playMusic() {
+    loadMusic();
+
+    Mix_PlayMusic(music, -1);
+}
+
 void RenderWindow::display() {
     SDL_RenderPresent(renderer);
 }

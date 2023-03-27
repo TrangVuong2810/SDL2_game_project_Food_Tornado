@@ -52,7 +52,7 @@ bool Mechanism::loadMedia(RenderWindow &p_window, const char* p_filePath) {
 
 void Mechanism::handleEvent(SDL_Event &p_event, RenderWindow& p_window, Basket& basket) {
     while (SDL_PollEvent(&p_event)) {
-        if (p_event.type == SDL_QUIT) {
+        if (p_event.type == SDL_QUIT || currentKeyStates[SDL_SCANCODE_ESCAPE]) {
             gameRunning = false;
             startGame = false;
             //p_window.cleanUp();
@@ -94,9 +94,10 @@ void Mechanism::startMenu(RenderWindow &p_window) {
 
 
         if (SDL_PollEvent(&event) != 0) {
-                if (event.type == SDL_QUIT || currentKeyStates[SDL_SCANCODE_UP]) {
-                    std::cout << "STOP MENU" << std::endl;
+                if (event.type == SDL_QUIT || currentKeyStates[SDL_SCANCODE_ESCAPE]) {
                     startGame = false;
+                    cleanUp();
+                    p_window.cleanUp();
                 }
                 else if (event.type == SDL_MOUSEMOTION || event.type == SDL_MOUSEBUTTONDOWN) {
 
@@ -139,7 +140,7 @@ void Mechanism::playGame(RenderWindow& p_window) {
 
     Basket basket;
 
-    int more = 2;
+    bool add = true;
 
     std::clock_t start, now;
     start = std::clock();
@@ -157,22 +158,14 @@ void Mechanism::playGame(RenderWindow& p_window) {
 
         //std::cout << "NOW: " << now << " DURATION: " << duration << std::endl;
 
-        if (duration >= 15 && more > 0) {
-            if (level == 1 && food[0].getFoodPos().y >= 300 && food[0].getFoodPos().y <= 350) {
+        if (duration >= 15 && add) { //around 60s
+            if (level == 2 && food[0].getFoodPos().y >= 300 && food[0].getFoodPos().y <= 350) {
                 std::cout << "FOOD 0 POS Y: " << food[0].getFoodPos().y << std::endl;
                 std::cout << "NOW: " << now << " DURATION: " << duration << std::endl;
                 Food newFood;
                 food.push_back(newFood);
                 start = std::clock();
-                more--;
-            }
-            else if ( level == 3 && food[1].getFoodPos().y >= 200 && food[1].getFoodPos().y <= 300) {
-                std::cout << "FOOD 1 POS Y: " << food[1].getFoodPos().y << std::endl;
-                std::cout << "NOW: " << now << " DURATION: " << duration << std::endl;
-                Food newFood;
-                food.push_back(newFood);
-                start = std::clock();
-                more--;
+                add = false;
             }
         }
 
@@ -203,6 +196,7 @@ void Mechanism::playGame(RenderWindow& p_window) {
         }
     }
 
+    renderGameOver(p_window);
     renderLives(p_window);
 
     food.clear();
@@ -216,10 +210,10 @@ void Mechanism::renderLives(RenderWindow& p_window) {
     int currentLives = lives;
     for (int i = 0; i < MAX_LIVES; i++) {
         if (currentLives > 0) {
-            utilsEntities.push_back(Entity(VectorMath(rightDropBorder + alignLives_screen + i *  livesWitdth * livesRatio, SCREEN_HEIGHT / 2), livesRect, loadUtils));
+            utilsEntities.push_back(Entity(VectorMath(550 + i *  livesWitdth * livesRatio, SCREEN_HEIGHT / 2.15), livesRect, loadUtils));
             currentLives--;
         }
-        else utilsEntities.push_back(Entity(VectorMath(rightDropBorder + alignLives_screen + i *  livesWitdth * livesRatio, SCREEN_HEIGHT / 2), deadRect, loadUtils));
+        else utilsEntities.push_back(Entity(VectorMath(550 + i *  livesWitdth * livesRatio, SCREEN_HEIGHT / 2.15), deadRect, loadUtils));
     }
 
 
@@ -234,12 +228,14 @@ void Mechanism::updateGame(Basket &p_basket, Food &p_food, RenderWindow &p_windo
     if (p_food.getFoodPos().y >= p_basket.getBasketPos().y) {
        if (p_food.getFoodPos().x >= p_basket.getBasketPos().x && p_food.getFoodPos().x + MAX_FOOD_WIDTH * foodRatio <= p_basket.getBasketPos().x + basketWidth *basketRatio
             && p_food.getFoodPos().y + MAX_FOOD_HEIGHT * foodRatio < bottomDropBorder) {
+            Mix_PlayChannel(-1, p_window.getMix_Chunk(4), 0);
             updateScore();
             updateLevel();
             std::cout << "SCORE: " << score << std::endl << "LEVEL: " << level << std::endl;
             p_food.foodDrop(p_window, FALSE, level);
         }
         else if (p_food.getFoodPos().y >= bottomDropBorder - MAX_FOOD_HEIGHT * foodRatio) {
+            Mix_PlayChannel(-1, p_window.getMix_Chunk(5), 0);
             updateLives();
             std::cout << "LIVES: " << lives << std::endl << "LEVEL: " << level << std::endl;
             p_food.foodDrop(p_window, FALSE, level);
@@ -248,6 +244,8 @@ void Mechanism::updateGame(Basket &p_basket, Food &p_food, RenderWindow &p_windo
 
 
     if (lives == 0) {
+        Mix_PlayChannel(-1, p_window.getMix_Chunk(3), 0);
+        Mix_HaltMusic();
         std::cout << "GAME OVER" << std::endl;
         gameRunning = false;
         startGame = false;
@@ -271,13 +269,24 @@ void Mechanism::renderScores(RenderWindow& p_window) {
     int index = 0;
     for (int& i : seperatedScores) {
         SDL_Rect numRect = {i * 40, 0, 40, 40};
-        utilsEntities.push_back(Entity(VectorMath(500 + index * 40, 100), numRect, loadUtils));
+        utilsEntities.push_back(Entity(VectorMath(600 + index * 40 - 5, 185), numRect, loadUtils));
         index++;
     }
 
     for (Entity& e : utilsEntities) {
         p_window.render(e, numRatio);
     }
+
+    cleanUp();
+
+    loadUtils = p_window.loadTexture(scoreFilePath.c_str());
+
+    utilsEntities.push_back(Entity(VectorMath(460, 50), scoreRect, loadUtils));
+
+    for (Entity& e : utilsEntities) {
+        p_window.render(e, scoreRatio);
+    }
+
 }
 
 int Mechanism::getScore() {
@@ -302,6 +311,18 @@ void Mechanism::updateStartMenu(const bool& newValue) {
 
 void Mechanism::updateGameRunning(const bool& newValue) {
     gameRunning = newValue;
+}
+
+void Mechanism::renderGameOver(RenderWindow& p_window) {
+    cleanUp();
+
+    loadUtils = p_window.loadTexture(gameOverFilePath.c_str());
+
+    utilsEntities.push_back(Entity(VectorMath(455, 325), gameOverRect, loadUtils));
+
+    for (Entity& e : utilsEntities) {
+        p_window.render(e, gameOverRatio);
+    }
 }
 
 

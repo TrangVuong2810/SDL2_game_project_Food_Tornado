@@ -1,6 +1,5 @@
 1. NEED TO BE FIXED:
 
-- Frame time? //is it too fast?.....
 - Efficient way to generate numerous number of food and falling at RANDOM TIME AND SEPERATELY
 
 
@@ -9,8 +8,9 @@
 - Level system (Optional: Add more level)
     + Food (faster) //Done but need to re-check
     + Basket (faster)
-- Score (Store highest score also) //done but need to render to screen and add store highest score
+- Score (Store highest score also) //done but need to add store highest score
 - Game over screen
     + Optional: Play again
-- Sound effect
-- Add decorations
+- Sound effect //done
+    + Optional: Pause music
+- Food rotating

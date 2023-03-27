@@ -21,15 +21,21 @@ const bool FALSE = false;
 
 const std::string livesFilePath = {"Utils.png"};
 const std::string numbersFilePath = {"Numbers.png"};
+const std::string scoreFilePath = {"Score.png"};
+const std::string gameOverFilePath = {"GameOver.png"};
 
 const SDL_Rect livesRect = {0, 34, 16, 13};
 const double livesWitdth = 16;
 const double livesRatio = 3.5;
 const SDL_Rect deadRect = {32, 34, 16, 13};
+const SDL_Rect scoreRect = {0, 0, 240, 120};
+const SDL_Rect gameOverRect = {0, 0, 240, 120};
 
-const double numRatio = 1;
+const double numRatio = 1.75;
+const double scoreRatio = 1.5;
+const double gameOverRatio = 1.5;
 
-const double alignLives_screen = (SCREEN_WIDTH - rightDropBorder - boulderWidth * boulderRatio) / 3;
+const double alignLives_screen = (SCREEN_WIDTH - rightDropBorder - boulderWidth * boulderRatio) / 3; // ?
 
 const int MAX_LIVES = 3;
 
@@ -70,6 +76,8 @@ public:
     void playGame(RenderWindow &p_window);
     void renderLives(RenderWindow& p_window);
     void renderScores(RenderWindow& p_window);
+
+    void renderGameOver(RenderWindow& p_window);
 
     int getScore();
     int getLevel();

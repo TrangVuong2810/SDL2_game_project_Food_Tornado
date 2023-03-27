@@ -30,15 +30,15 @@ void Cow::setPosition(double x, double y) {
 }
 
 void Cow::setCowSprite() {
-    if (currentSprite == COW_DEFAULT && cntSprite == 50) {
+    if (currentSprite == COW_DEFAULT && cntSprite == MAX_SPRITES) {
         currentSprite = COW_CLOSED_EYES;
         cntSprite = 0;
     }
-    else if (currentSprite == COW_CLOSED_EYES && cntSprite == 50) {
+    else if (currentSprite == COW_CLOSED_EYES && cntSprite == MAX_SPRITES) {
         currentSprite = COW_WAVING_TAIL;
         cntSprite = 0;
     }
-    else if (currentSprite == COW_WAVING_TAIL && cntSprite == 50) {
+    else if (currentSprite == COW_WAVING_TAIL && cntSprite == MAX_SPRITES) {
         currentSprite = COW_DEFAULT;
         cntSprite = 0;
     }

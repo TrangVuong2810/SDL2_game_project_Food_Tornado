@@ -8,6 +8,7 @@
 
 #include "VectorMath.h"
 #include "RenderWindow.h"
+#include "Bear.h"
 
 const SDL_Rect cowRect1 = {1, 0, 31, 31};
 const SDL_Rect cowRect2 = {33, 0, 31, 31};

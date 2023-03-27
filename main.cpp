@@ -16,9 +16,10 @@
 
 void waitUntilKeyPressed() {
     SDL_Event e;
+    const Uint8* keyboardState = SDL_GetKeyboardState(NULL);
     while (true) {
         if ( SDL_WaitEvent(&e) != 0 &&
-             (e.type == SDL_KEYDOWN || e.type == SDL_QUIT) )
+             (keyboardState[SDL_SCANCODE_ESCAPE] || e.type == SDL_QUIT) )
             return;
         SDL_Delay(100);
     }
@@ -40,7 +41,7 @@ int main (int argc, char* argv[]) {
 
     RenderWindow window(WINDOW_TITLE.c_str(), SCREEN_WIDTH, SCREEN_HEIGHT);
 
-    window.loadMusic();
+    window.playMusic();
 
     Mechanism mechanism;
 

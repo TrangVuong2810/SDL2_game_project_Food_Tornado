@@ -32,6 +32,7 @@ public:
     RenderWindow(const char* WINDOW_TITLE, int SCREEN_WIDTH, int SCREEN_HEIGHT);
     SDL_Texture* loadTexture(const char* _filePath);
 
+    void playMusic();
     void loadMusic();
     Mix_Chunk* getMix_Chunk(int soundIndex);
 
