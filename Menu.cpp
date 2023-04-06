@@ -64,7 +64,6 @@ void Menu::renderDefaultMenu(RenderWindow& p_window) {
 
     setButtonSprite(aboutButton);
 
-
     render(p_window, buttonRatio);
 
     clearVector();

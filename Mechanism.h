@@ -15,6 +15,7 @@
 #include "Basket.h"
 #include "Menu.h"
 #include "Button.h"
+#include "Icon.h"
 
 const bool TRUE = true;
 const bool FALSE = false;
@@ -60,8 +61,11 @@ private:
 
     bool startGame;
     bool gameRunning;
+    bool paused;
 
     SDL_Event event;
+
+    Icon pauseIcon;
 
     const Uint8* currentKeyStates = SDL_GetKeyboardState( NULL );
 public:
@@ -70,18 +74,26 @@ public:
     void cleanUp();
     void clearVector();
     bool loadMedia(RenderWindow& p_window, const char* p_filePath);
+
     void handleEvent (SDL_Event &p_event, RenderWindow& p_window, Basket& basket);
     void handleEventMenu (SDL_Event &p_event, RenderWindow& p_window, Menu& p_menu);
+    void handlePauseIcon (SDL_Event &p_event, RenderWindow& p_window);
+
     void startMenu (RenderWindow &p_window);
     void playGame(RenderWindow &p_window);
     void renderLives(RenderWindow& p_window);
     void renderScores(RenderWindow& p_window);
+
+    void renderPauseIcon(RenderWindow& p_window);
 
     void renderGameOver(RenderWindow& p_window);
 
     int getScore();
     int getLevel();
     int getLives();
+
+    void damn(RenderWindow& p_window);
+
     void updateScore();
     void updateLives();
     void updateLevel();

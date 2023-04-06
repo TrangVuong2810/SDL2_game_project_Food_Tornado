@@ -41,5 +41,7 @@ public:
     void render(Entity& p_entity, const double& p_ratio);
     void display();
 
+    bool wait = true;
+
 };
 

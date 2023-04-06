@@ -21,10 +21,9 @@ void waitUntilKeyPressed() {
         if ( SDL_WaitEvent(&e) != 0 &&
              (keyboardState[SDL_SCANCODE_ESCAPE] || e.type == SDL_QUIT) )
             return;
-        SDL_Delay(100);
+        //SDL_Delay(100);
     }
 }
-
 
 int main (int argc, char* argv[]) {
     srand(time(NULL));
@@ -48,9 +47,11 @@ int main (int argc, char* argv[]) {
     window.display();
 
     mechanism.startMenu(window);
-    //mechanism.playGame(window);
 
-    waitUntilKeyPressed();
+    while (window.wait) {
+        mechanism.damn(window);
+        window.display();
+    }
 
     window._clear();
     window.cleanUp();

@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1679937601 source:e:\codeblocks\btap\food tornado\main.cpp
+1680238540 source:e:\codeblocks\btap\food tornado\main.cpp
 	<bits/stdc++.h>
 	<SDL.h>
 	<SDL_image.h>
@@ -13,7 +13,7 @@
 	"Basket.h"
 	"Mechanism.h"
 
-1679934505 e:\codeblocks\btap\food tornado\renderwindow.h
+1680134340 e:\codeblocks\btap\food tornado\renderwindow.h
 	<bits/stdc++.h>
 	<SDL.h>
 	<SDL_image.h>
@@ -113,7 +113,7 @@
 	"VectorMath.h"
 	"Food.h"
 
-1679937762 source:e:\codeblocks\btap\food tornado\mechanism.cpp
+1680720481 source:e:\codeblocks\btap\food tornado\mechanism.cpp
 	<bits/stdc++.h>
 	<SDL.h>
 	<SDL_image.h>
@@ -127,8 +127,9 @@
 	"Mechanism.h"
 	"Button.h"
 	"Menu.h"
+	"Icon.h"
 
-1679937630 e:\codeblocks\btap\food tornado\mechanism.h
+1680719469 e:\codeblocks\btap\food tornado\mechanism.h
 	<bits/stdc++.h>
 	<chrono>
 	<SDL.h>
@@ -143,6 +144,7 @@
 	"Basket.h"
 	"Menu.h"
 	"Button.h"
+	"Icon.h"
 
 1678696688 e:\codeblocks\btap\food tornado\text.h
 	<bits/stdc++.h>
@@ -190,7 +192,7 @@
 	"Entity.h"
 	"VectorMath.h"
 
-1679937903 source:e:\codeblocks\btap\food tornado\menu.cpp
+1680693307 source:e:\codeblocks\btap\food tornado\menu.cpp
 	<bits/stdc++.h>
 	<SDL.h>
 	<SDL_image.h>
@@ -246,7 +248,7 @@
 	"RenderWindow.h"
 	"Bear.h"
 
-1679906045 e:\codeblocks\btap\food tornado\bear.h
+1680515690 e:\codeblocks\btap\food tornado\bear.h
 	<bits/stdc++.h>
 	<SDL.h>
 	<SDL_image.h>
@@ -254,4 +256,23 @@
 	<SDL_mixer.h>
 	"VectorMath.h"
 	"RenderWindow.h"
+
+1680712233 e:\codeblocks\btap\food tornado\icon.h
+	<bits/stdc++.h>
+	<SDL.h>
+	<SDL_image.h>
+	<SDL_ttf.h>
+	"RenderWindow.h"
+	"Entity.h"
+	"VectorMath.h"
+
+1680718615 source:e:\codeblocks\btap\food tornado\icon.cpp
+	<bits/stdc++.h>
+	<SDL.h>
+	<SDL_image.h>
+	<SDL_ttf.h>
+	"RenderWindow.h"
+	"Entity.h"
+	"VectorMath.h"
+	"Icon.h"
 

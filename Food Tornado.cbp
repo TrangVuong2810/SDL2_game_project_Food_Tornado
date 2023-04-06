@@ -45,6 +45,8 @@
 		<Unit filename="Entity.h" />
 		<Unit filename="Food.cpp" />
 		<Unit filename="Food.h" />
+		<Unit filename="Icon.cpp" />
+		<Unit filename="Icon.h" />
 		<Unit filename="Mechanism.cpp" />
 		<Unit filename="Mechanism.h" />
 		<Unit filename="Menu.cpp" />
