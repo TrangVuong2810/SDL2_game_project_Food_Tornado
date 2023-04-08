@@ -7,6 +7,3 @@
 - Level system (Optional: Add more level)
     + Basket (faster)
 - Store highest score
-- Sound effect //done
-    + Optional: Pause music
-- Food rotating

@@ -99,4 +99,3 @@ void Background::renderDropAreaBackground(RenderWindow& p_window) {
 
     cleanBackground();
 }
-

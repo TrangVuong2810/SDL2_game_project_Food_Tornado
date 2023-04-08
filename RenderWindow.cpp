@@ -74,13 +74,21 @@ void RenderWindow::render (Entity& p_entity, const double& p_ratio) {
     dst.w = p_entity.getCurrentFrame().w * p_ratio;
     dst.h = p_entity.getCurrentFrame().h * p_ratio;
 
+    if (p_entity.rotationCheck()) {
+        SDL_RenderCopyEx(renderer, p_entity.getTex(), &src, &dst, p_entity.getDeg(), NULL, p_entity.getFLip());
+    }
     //SDL_RenderCopy(renderer, _texture, NULL, NULL);
-    SDL_RenderCopy(renderer, p_entity.getTex(), &src, &dst);
+    else {
+        SDL_RenderCopy(renderer, p_entity.getTex(), &src, &dst);
+    }
 }
 
 void RenderWindow::loadMusic() {
 	//Load music
-	music = Mix_LoadMUS( "Music.wav" );
+	int musicNum = rand() % 3;
+	if (musicNum == 0) music = Mix_LoadMUS( "Music.wav" );
+	else if (musicNum == 1) music = Mix_LoadMUS( "Music2.wav" );
+	else music = Mix_LoadMUS( "Music3.wav" );
 	if( music == nullptr ) {
 		std::cout << "Failed to load music! SDL_mixer Error: " << Mix_GetError() << std::endl ;
 	}
@@ -116,7 +124,6 @@ void RenderWindow::loadMusic() {
 Mix_Chunk* RenderWindow::getMix_Chunk(int soundIndex) {
     switch (soundIndex) {
     case 1:
-        std::cout << "OK" <<std::endl;
         return menu_click;
         break;
     case 2:
@@ -132,7 +139,6 @@ Mix_Chunk* RenderWindow::getMix_Chunk(int soundIndex) {
         return missed;
         break;
     }
-    std::cout << "UHO" <<std::endl;
     return nullptr;
 }
 

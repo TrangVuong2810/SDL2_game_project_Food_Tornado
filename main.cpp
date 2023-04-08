@@ -49,7 +49,7 @@ int main (int argc, char* argv[]) {
     mechanism.startMenu(window);
 
     while (window.wait) {
-        mechanism.damn(window);
+        mechanism.playAgain(window);
         window.display();
     }
 

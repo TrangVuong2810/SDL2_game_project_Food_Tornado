@@ -66,11 +66,16 @@ void Mechanism::handleEvent(SDL_Event &p_event, RenderWindow& p_window, Basket& 
             key = 'R';
             basket.basketMove(p_window, key);
         }
+        else if (currentKeyStates[ SDL_SCANCODE_DOWN]) {
+            gameRunning = false;
+            startGame = false;
+            Mix_HaltMusic();
+        }
         else {//if (p_event.type == SDL_MOUSEMOTION || p_event.type == SDL_MOUSEBUTTONDOWN || p_event.type == SDL_MOUSEBUTTONUP) {
-            handlePauseIcon (p_event, p_window);
+            handleIcon (p_event, p_window);
+
         }
     }
-    //else handlePauseIcon(p_event, p_window);
 }
 
 
@@ -108,7 +113,6 @@ void Mechanism::startMenu(RenderWindow &p_window) {
 
         }
 
-
         p_window.display();
 
         frameTime = SDL_GetTicks() - frameStart;
@@ -120,7 +124,7 @@ void Mechanism::startMenu(RenderWindow &p_window) {
 
 }
 
-void Mechanism::handlePauseIcon (SDL_Event& p_event, RenderWindow& p_window) {
+void Mechanism::handleIcon (SDL_Event& p_event, RenderWindow& p_window) {
     if (pauseIcon.isInside(p_event)) {
         switch (p_event.type) {
         case SDL_MOUSEMOTION:
@@ -131,11 +135,18 @@ void Mechanism::handlePauseIcon (SDL_Event& p_event, RenderWindow& p_window) {
             pauseIcon.currentSprite = ICON_MOUSE_CLICK;
 
             Mix_PlayChannel(-1, p_window.getMix_Chunk(2), 0);
-            if (Mix_PausedMusic() == 1) Mix_ResumeMusic();
-            else Mix_PauseMusic();
+            if (p_window.playingMusic) {
+               if (Mix_PausedMusic() == 1) {
+                    Mix_ResumeMusic();
+                }
+                else {
+                    Mix_PauseMusic();
+                }
+            }
 
             break;
         case SDL_MOUSEBUTTONUP:
+
             paused = !paused;
 
             if (paused) pauseIcon.currentSprite = ICON_MOUSE_CLICK;
@@ -144,14 +155,44 @@ void Mechanism::handlePauseIcon (SDL_Event& p_event, RenderWindow& p_window) {
             break;
         }
     }
+    else if (musicIcon.isInside(p_event) && paused == false) {
+        switch (p_event.type) {
+        case SDL_MOUSEMOTION:
+            if (Mix_PausedMusic() == 1) musicIcon.currentSprite = ICON_MOUSE_CLICK;
+            else musicIcon.currentSprite = ICON_MOUSE_DEFAULT;
+            break;
+        case SDL_MOUSEBUTTONDOWN:
+            Mix_PlayChannel(-1, p_window.getMix_Chunk(2), 0);
+            if (Mix_PausedMusic() == 1) {
+                    Mix_ResumeMusic();
+                    p_window.playingMusic = true;
+            }
+
+            else {
+                    Mix_PauseMusic();
+                    p_window.playingMusic = false;
+            }
+
+            if (Mix_PausedMusic() == 1) musicIcon.currentSprite = ICON_MOUSE_CLICK;
+            else musicIcon.currentSprite = ICON_MOUSE_DEFAULT;
+            break;
+        case SDL_MOUSEBUTTONUP:
+
+            break;
+        }
+    }
     else  {
         if (paused) pauseIcon.currentSprite = ICON_MOUSE_CLICK;
         else pauseIcon.currentSprite = ICON_MOUSE_DEFAULT;
+
+        if (Mix_PausedMusic() == 1) musicIcon.currentSprite = ICON_MOUSE_CLICK;
+        else musicIcon.currentSprite = ICON_MOUSE_DEFAULT;
     }
+
 }
 
 
-void Mechanism::renderPauseIcon (RenderWindow& p_window) {
+void Mechanism::renderIcon (RenderWindow& p_window) {
     cleanUp();
 
     pauseIcon.loadMedia(p_window, "pauseIcon.png");
@@ -159,10 +200,14 @@ void Mechanism::renderPauseIcon (RenderWindow& p_window) {
 
     utilsEntities.push_back (pauseIcon.iconEntity());
 
+    musicIcon.loadMedia(p_window, musicIconFilePath.c_str());
+    musicIcon.setPosition(musicIconPos.x, musicIconPos.y);
+
+    utilsEntities.push_back(musicIcon.iconEntity());
+
     for (Entity& e : utilsEntities) {
         p_window.render(e, iconRatio);
     }
-
 }
 
 
@@ -175,8 +220,6 @@ void Mechanism::playGame(RenderWindow& p_window) {
 
     Basket basket;
 
-    bool add = true;
-
     std::clock_t start, now;
     start = std::clock();
 
@@ -187,20 +230,38 @@ void Mechanism::playGame(RenderWindow& p_window) {
         background.renderDropAreaBackground(p_window);
         background.renderDropArea(p_window);
 
-        renderPauseIcon (p_window);
+        renderIcon (p_window);
 
         now = std::clock();
 
         double duration = double(now - start) / double(CLOCKS_PER_SEC);
 
-        if (duration >= 15 && add) { //around 60s
-            if (level == 2 && food[0].getFoodPos().y >= 300 && food[0].getFoodPos().y <= 350) {
+        if (duration >= 60 && food.size() < 3) {
+            if (level == 2 && food[0].getFoodPos().y >= 300 && food[0].getFoodPos().y <= 350 && lives >= 2) {
                 std::cout << "FOOD 0 POS Y: " << food[0].getFoodPos().y << std::endl;
                 std::cout << "NOW: " << now << " DURATION: " << duration << std::endl;
                 Food newFood;
                 food.push_back(newFood);
                 start = std::clock();
-                add = false;
+                now = std::clock();
+            }
+            else if (level >= 3) {
+                if (food.size() == 1 && food[0].getFoodPos().y >= 300 && food[0].getFoodPos().y <= 350) {
+                    std::cout << "FOOD 0 POS Y: " << food[0].getFoodPos().y << std::endl;
+                    std::cout << "NOW: " << now << " DURATION: " << duration << std::endl;
+                    Food newFood;
+                    food.push_back(newFood);
+                    start = std::clock();
+                    now = std::clock();
+                }
+                else if (food.size() == 2 && food[1].getFoodPos().y >= 200 && food[1].getFoodPos().y <= 250) {
+                    std::cout << "FOOD 1 POS Y: " << food[1].getFoodPos().y << std::endl;
+                    std::cout << "NOW: " << now << " DURATION: " << duration << std::endl;
+                    Food newFood;
+                    food.push_back(newFood);
+                    start = std::clock();
+                    now = std::clock();
+                }
             }
         }
 
@@ -234,22 +295,23 @@ void Mechanism::playGame(RenderWindow& p_window) {
         }
     }
 
+    std::cout << "FOOD NUM: " << food.size() << std::endl;
     food.clear();
 
     renderLives(p_window);
     renderGameOver(p_window);
 }
 
-void Mechanism::damn(RenderWindow& p_window) {
+void Mechanism::playAgain(RenderWindow& p_window) {
     while (SDL_PollEvent(&event)) {
         if (currentKeyStates[ SDL_SCANCODE_SPACE ] || currentKeyStates[SDL_SCANCODE_ESCAPE]) {
             if (currentKeyStates[ SDL_SCANCODE_SPACE ]) {
-                std::cout << "SPACE" << std::endl;
                 lives = MAX_LIVES;
                 score = 0;
                 level = 1;
                 gameRunning = true;
                 startGame = true;
+                p_window.loadMusic();
                 p_window.playMusic();
                 playGame(p_window);
                 break;
@@ -388,7 +450,6 @@ void Mechanism::renderGameOver(RenderWindow& p_window) {
     cleanUp();
 
     loadMedia(p_window, "instruc_end.png");
-    //loadUtils = p_window.loadTexture("instruc_end.png");
 
     utilsEntities.push_back(Entity(VectorMath(), fullScreenRect, loadUtils));
 
@@ -406,4 +467,5 @@ void Mechanism::updateLevel() {
     }
 
 }
+
 

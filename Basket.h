@@ -8,12 +8,8 @@
 #include "RenderWindow.h"
 #include "Entity.h"
 #include "VectorMath.h"
-#include "Food.h"
+#include "Const_Vars.h"
 
-const SDL_Rect basket_rect = {16, 82, 16, 14};
-const double basketWidth = 16;
-const double basketHeight = 14;
-const double basketRatio = 5;
 
 class Basket {
 private:

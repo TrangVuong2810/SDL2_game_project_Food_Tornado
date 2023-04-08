@@ -8,10 +8,8 @@
 #include "RenderWindow.h"
 #include "Entity.h"
 #include "VectorMath.h"
+#include "Const_Vars.h"
 
-
-const SDL_Rect menuButtons = {0, 0, 144, 72};
-const SDL_Rect menuButtonsHover = {0, 72, 144, 72};
 
 
 enum ButtonSprite

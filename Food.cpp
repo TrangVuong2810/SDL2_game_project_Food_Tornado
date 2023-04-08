@@ -49,10 +49,12 @@ void Food::randomFoodRender(RenderWindow &p_window) {
     pos.setVectorMath((double)(rand() % 271 + 139), topDropBorder); //x from 139 to 409
 
     foodNum = rand() % 4;
+    foodFlip = rand() % 3;
+    foodRotate = rand() % 360;
 
-    foodEntities.push_back(Entity(pos, food[foodNum], loadFood));
+    foodEntities.push_back(Entity(pos, food[foodNum], loadFood, foodRotate, foodFlip));
 
-    std::cout << "NEW FOOD: " << pos.x << " " << pos.y << std::endl;
+    std::cout << "NEW FOOD: " << pos.x << " " << pos.y << " ROTATION: " << foodRotate << " " << foodFlip << std::endl;
 
     foodRender(p_window, foodRatio);
 }
@@ -70,7 +72,7 @@ void Food::foodDrop (RenderWindow &p_window, const bool &p_check, int &p_level) 
         if (p_level == 1) pos.y += 1;
         else if (p_level == 2) pos.y += 2;
         else pos.y += 3;
-        foodEntities.push_back(Entity(pos, food[foodNum], loadFood));
+        foodEntities.push_back(Entity(pos, food[foodNum], loadFood, foodRotate, foodFlip));
         foodRender(p_window, foodRatio);
     }
     else {

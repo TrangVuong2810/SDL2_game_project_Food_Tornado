@@ -39,6 +39,7 @@
 		<Unit filename="Bear.h" />
 		<Unit filename="Button.cpp" />
 		<Unit filename="Button.h" />
+		<Unit filename="Const_Vars.h" />
 		<Unit filename="Cow.cpp" />
 		<Unit filename="Cow.h" />
 		<Unit filename="Entity.cpp" />

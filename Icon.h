@@ -8,12 +8,9 @@
 #include "RenderWindow.h"
 #include "Entity.h"
 #include "VectorMath.h"
+#include "Const_Vars.h"
 
 
-const SDL_Rect iconDefaultRect = {0, 0, 128, 128};
-const SDL_Rect iconClickedRect = {0, 128, 128, 128};
-
-const double iconRatio = 0.5;
 
 enum iconSprite
 {

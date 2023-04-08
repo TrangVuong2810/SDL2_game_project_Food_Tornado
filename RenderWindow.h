@@ -27,8 +27,10 @@ private:
     Mix_Chunk* missed = nullptr; //5
 
 public:
-
     ~RenderWindow();
+
+    bool playingMusic = true;
+
     RenderWindow(const char* WINDOW_TITLE, int SCREEN_WIDTH, int SCREEN_HEIGHT);
     SDL_Texture* loadTexture(const char* _filePath);
 

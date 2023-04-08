@@ -10,6 +10,7 @@
 #include "Basket.h"
 #include "Button.h"
 #include "Menu.h"
+#include "Icon.h"
 
 Menu::~Menu() {
     cleanMenu();
@@ -40,6 +41,14 @@ void Menu::setButtonSprite(Button& p_button) {
 void Menu::renderDefaultMenu(RenderWindow& p_window) {
     cleanMenu();
 
+    loadButtons(p_window);
+
+    menuEntities.push_back(Entity(rootPos, fullScreenRect, loadMenuBackground));
+
+    render(p_window, fullScreenRatio);
+
+    clearVector();
+
     cow.loadMedia(p_window, cowFilePath.c_str());
     renderCow();
 
@@ -53,8 +62,6 @@ void Menu::renderDefaultMenu(RenderWindow& p_window) {
     render(p_window, bearRatio);
 
     clearVector();
-
-    loadButtons(p_window);
 
     setButtonSprite(playButton);
 
@@ -68,14 +75,22 @@ void Menu::renderDefaultMenu(RenderWindow& p_window) {
 
     clearVector();
 
-    menuEntities.push_back(Entity(rootPos, fullScreenRect, loadMenuBackground));
+    menuEntities.push_back(musicIcon.iconEntity());
 
-    render(p_window, fullScreenRatio);
+    render(p_window, iconRatio);
 
 }
 
 void Menu::renderMenu(RenderWindow& p_window, SDL_Event& p_event) {
     cleanMenu();
+
+    loadButtons(p_window);
+
+    menuEntities.push_back(Entity(rootPos, fullScreenRect, loadMenuBackground));
+
+    render(p_window, fullScreenRatio);
+
+    clearVector();
 
     cow.loadMedia(p_window, cowFilePath.c_str());
     renderCow();
@@ -90,8 +105,6 @@ void Menu::renderMenu(RenderWindow& p_window, SDL_Event& p_event) {
     render(p_window, bearRatio);
 
     clearVector();
-
-    loadButtons(p_window);
 
     handlePlayButton(p_window, p_event);
     setButtonSprite(playButton);
@@ -109,12 +122,44 @@ void Menu::renderMenu(RenderWindow& p_window, SDL_Event& p_event) {
 
     clearVector();
 
-    menuEntities.push_back(Entity(rootPos, fullScreenRect, loadMenuBackground));
+    handleMusicIcon(p_window, p_event);
+    menuEntities.push_back(musicIcon.iconEntity());
 
-    render(p_window, fullScreenRatio);
+    render(p_window, iconRatio);
 
 }
 
+void Menu::handleMusicIcon (RenderWindow& p_window, SDL_Event& p_event) {
+        if (musicIcon.isInside(p_event)) {
+        switch (p_event.type) {
+        case SDL_MOUSEMOTION:
+            if (Mix_PausedMusic() == 1) musicIcon.currentSprite = ICON_MOUSE_CLICK;
+            else musicIcon.currentSprite = ICON_MOUSE_DEFAULT;
+            break;
+        case SDL_MOUSEBUTTONDOWN:
+            Mix_PlayChannel(-1, p_window.getMix_Chunk(2), 0);
+            if (Mix_PausedMusic() == 1) {
+                    Mix_ResumeMusic();
+                    p_window.playingMusic = true;
+            }
+
+            else {
+                    Mix_PauseMusic();
+                    p_window.playingMusic = false;
+            }
+
+            if (Mix_PausedMusic() == 1) musicIcon.currentSprite = ICON_MOUSE_CLICK;
+            else musicIcon.currentSprite = ICON_MOUSE_DEFAULT;
+            break;
+        case SDL_MOUSEBUTTONUP:
+            break;
+        }
+    }
+    else  {
+        if (Mix_PausedMusic() == 1) musicIcon.currentSprite = ICON_MOUSE_CLICK;
+        else musicIcon.currentSprite = ICON_MOUSE_DEFAULT;
+    }
+}
 
 void Menu::handleGameButton(RenderWindow& p_window, SDL_Event& p_event) {
     //cleanMenu();
@@ -146,7 +191,6 @@ void Menu::handleGameButton(RenderWindow& p_window, SDL_Event& p_event) {
                             backButton.currentSprite = BUTTON_MOUSE_OVER;
                             Mix_PlayChannel(-1, p_window.getMix_Chunk(2), 0);
                             readingDone = true;
-                            SDL_Delay(500);
 
 
                             break;
@@ -218,8 +262,6 @@ void Menu::handleInforButton(RenderWindow& p_window, SDL_Event& p_event) {
                             Mix_PlayChannel(-1, p_window.getMix_Chunk(2), 0);
                             readingDone = true;
 
-                            SDL_Delay(500);
-
                             break;
                         }
                     }
@@ -290,8 +332,6 @@ void Menu::handleAboutButton(RenderWindow& p_window, SDL_Event& p_event) {
                             backButton.currentSprite = BUTTON_MOUSE_OVER;
                             Mix_PlayChannel(-1, p_window.getMix_Chunk(2), 0);
                             readingDone = true;
-
-                            SDL_Delay(500);
 
                             break;
                         }
@@ -392,4 +432,6 @@ void Menu::loadButtons(RenderWindow& p_window) {
     backButton.loadMedia(p_window, backButtonFilePath.c_str());
     backButton.setPosition(rootPos.x, rootPos.y);
 
+    musicIcon.loadMedia (p_window, musicIconFilePath.c_str());
+    musicIcon.setPosition(musicIconPos.x, musicIconPos.y);
 }
