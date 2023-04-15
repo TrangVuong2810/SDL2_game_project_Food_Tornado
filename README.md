@@ -14,7 +14,7 @@ You are a friend of a bear in the wood. One day, there is a strange tornado swee
 
 Use two arrow keys ⬅ and ➡ to move the basket to catch as much food as possible. Be careful since the food will drop faster over time. You can pause the game if you need to take a break.
 
-You will have 3 "lives" at the beginning of the game. Each time you miss a portion of food, the bear will get angry and take away one of your "lives". The game will end when you run out of "lives" so watch out!
+You will have 3 "lives" at the beginning of the game. Each time you miss a portion of food or catch the wrong "food" (small rock or wood log), the bear will get angry and take away one of your "lives". You can also catch new "life" or a "shield" which can protect you from the bear's attack once. The game will end when you run out of "lives" so watch out!
 
 ## Demo
 
