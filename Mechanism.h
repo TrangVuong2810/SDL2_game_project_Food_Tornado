@@ -5,7 +5,6 @@
 #include <SDL.h>
 #include <SDL_mixer.h>
 #include <SDL_image.h>
-#include <SDL_ttf.h>
 
 #include "RenderWindow.h"
 #include "Entity.h"
@@ -17,6 +16,8 @@
 #include "Button.h"
 #include "Icon.h"
 #include "Const_Vars.h"
+#include "Buff.h"
+#include "Debuff.h"
 
 class Mechanism {
 private:
@@ -37,7 +38,7 @@ private:
     Uint32 frameStart;
     int frameTime;
 
-    bool startGame;
+    //bool startGame;
     bool gameRunning;
     bool paused;
 
@@ -47,12 +48,16 @@ private:
     Icon musicIcon;
 
     const Uint8* currentKeyStates = SDL_GetKeyboardState( NULL );
+
+    bool shield;
 public:
     Mechanism();
     ~Mechanism();
     void cleanUp();
     void clearVector();
     bool loadMedia(RenderWindow& p_window, const char* p_filePath);
+
+    void handleFoodAdd(std::vector<Food>& p_food, std::clock_t &p_start, std::clock_t &p_now);
 
     void handleEvent (SDL_Event &p_event, RenderWindow& p_window, Basket& basket);
     void handleEventMenu (SDL_Event &p_event, RenderWindow& p_window, Menu& p_menu);
@@ -79,5 +84,11 @@ public:
     void updateStartMenu(const bool &newValue);
     void updateGameRunning (const bool &newValue);
     void updateGame(Basket &p_basket, Food &p_food, RenderWindow &p_window);
+    void handleBuff(Basket &p_basket, std::vector<Buff> &p_buff, RenderWindow &p_window);
+    void handleDebuff(Basket &p_basket, std::vector<Debuff> &p_debuff, RenderWindow &p_window);
+
+    void renderShield(RenderWindow &p_window);
+
+    bool startGame;
 };
 

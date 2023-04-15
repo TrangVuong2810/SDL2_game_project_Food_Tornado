@@ -37,11 +37,15 @@
 		<Unit filename="Basket.h" />
 		<Unit filename="Bear.cpp" />
 		<Unit filename="Bear.h" />
+		<Unit filename="Buff.cpp" />
+		<Unit filename="Buff.h" />
 		<Unit filename="Button.cpp" />
 		<Unit filename="Button.h" />
 		<Unit filename="Const_Vars.h" />
 		<Unit filename="Cow.cpp" />
 		<Unit filename="Cow.h" />
+		<Unit filename="Debuff.cpp" />
+		<Unit filename="Debuff.h" />
 		<Unit filename="Entity.cpp" />
 		<Unit filename="Entity.h" />
 		<Unit filename="Food.cpp" />

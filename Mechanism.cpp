@@ -1,7 +1,6 @@
 #include <bits/stdc++.h>
 #include <SDL.h>
 #include <SDL_image.h>
-#include <SDL_ttf.h>
 
 #include "RenderWindow.h"
 #include "Entity.h"
@@ -13,12 +12,15 @@
 #include "Button.h"
 #include "Menu.h"
 #include "Icon.h"
+#include "Buff.h"
+#include "Debuff.h"
 
 Mechanism::Mechanism() {
     score = 0;
     lives = MAX_LIVES;
     level = 1;
 
+    shield = false;
 
     startGame = true;
     gameRunning = true;
@@ -104,6 +106,13 @@ void Mechanism::startMenu(RenderWindow &p_window) {
                 p_window._clear();
                 background.renderGrassBackground(p_window);
                 menu.renderMenu(p_window, event);
+                if (menu.quit) {
+                    startGame = false;
+                    gameRunning = false;
+                    p_window.wait = false;
+                    cleanUp();
+                    break;
+                }
 
                 if (menu.play) {
                     playGame(p_window);
@@ -215,13 +224,18 @@ void Mechanism::playGame(RenderWindow& p_window) {
     frameStart = SDL_GetTicks();
 
     std::vector<Food> food(1);
+    std::vector<Debuff> debuff(0);
+    std::vector<Buff> buff(0);
 
     background.cleanBackground();
 
     Basket basket;
 
-    std::clock_t start, now;
+    std::clock_t start, now, de_buffStart, de_buffNow;
     start = std::clock();
+    de_buffStart = std::clock();
+
+    double de_buffTime = (double)(rand() % 30);
 
     while (gameRunning) {
         p_window._clear();
@@ -233,36 +247,37 @@ void Mechanism::playGame(RenderWindow& p_window) {
         renderIcon (p_window);
 
         now = std::clock();
+        de_buffNow = std::clock();
 
         double duration = double(now - start) / double(CLOCKS_PER_SEC);
+        double de_buffDuration = double(de_buffNow - de_buffStart) / double(CLOCKS_PER_SEC);
 
         if (duration >= 60 && food.size() < 3) {
-            if (level == 2 && food[0].getFoodPos().y >= 300 && food[0].getFoodPos().y <= 350 && lives >= 2) {
-                std::cout << "FOOD 0 POS Y: " << food[0].getFoodPos().y << std::endl;
-                std::cout << "NOW: " << now << " DURATION: " << duration << std::endl;
-                Food newFood;
-                food.push_back(newFood);
-                start = std::clock();
-                now = std::clock();
+            handleFoodAdd(food, start, now);
+        }
+        if (de_buffDuration >= de_buffTime) {
+            if (lives == 3 && shield) {
+                debuff.clear();
+                Debuff newDebuff;
+                debuff.push_back(newDebuff);
             }
-            else if (level >= 3) {
-                if (food.size() == 1 && food[0].getFoodPos().y >= 300 && food[0].getFoodPos().y <= 350) {
-                    std::cout << "FOOD 0 POS Y: " << food[0].getFoodPos().y << std::endl;
-                    std::cout << "NOW: " << now << " DURATION: " << duration << std::endl;
-                    Food newFood;
-                    food.push_back(newFood);
-                    start = std::clock();
-                    now = std::clock();
+            else {
+                int de_buff = rand() % 2;
+                if (de_buff == 0) {
+                    buff.clear();
+                    Buff newBuff;
+                    buff.push_back(newBuff);
                 }
-                else if (food.size() == 2 && food[1].getFoodPos().y >= 200 && food[1].getFoodPos().y <= 250) {
-                    std::cout << "FOOD 1 POS Y: " << food[1].getFoodPos().y << std::endl;
-                    std::cout << "NOW: " << now << " DURATION: " << duration << std::endl;
-                    Food newFood;
-                    food.push_back(newFood);
-                    start = std::clock();
-                    now = std::clock();
+                else {
+                    debuff.clear();
+                    Debuff newDebuff;
+                    debuff.push_back(newDebuff);
                 }
             }
+
+            de_buffTime = (double)(rand() % 30);
+            de_buffStart = std::clock();
+            de_buffNow = std::clock();
         }
 
         handleEvent(event, p_window, basket);
@@ -275,15 +290,29 @@ void Mechanism::playGame(RenderWindow& p_window) {
 
         renderLives(p_window);
         renderScores(p_window);
+        renderShield(p_window);
 
         for (Food &f : food) {
             f.foodDrop(p_window, TRUE, level);
         }
 
+        if (buff.size() > 0) {
+            for (Buff &b : buff) {
+                b.buffDrop(p_window, lives, level);
+            }
+        }
+        if (debuff.size() > 0) {
+            for (Debuff &d : debuff) {
+                d.debuffDrop(p_window, level);
+            }
+        }
+
+
         for (Food &f : food) {
             updateGame(basket, f, p_window);
         }
-
+        handleBuff(basket, buff, p_window);
+        handleDebuff(basket, debuff, p_window);
 
         p_window.display();
 
@@ -295,11 +324,38 @@ void Mechanism::playGame(RenderWindow& p_window) {
         }
     }
 
-    std::cout << "FOOD NUM: " << food.size() << std::endl;
     food.clear();
+    buff.clear();
+    debuff.clear();
 
     renderLives(p_window);
     renderGameOver(p_window);
+}
+
+void Mechanism::handleFoodAdd(std::vector<Food>& food, std::clock_t &start, std::clock_t &now) {
+    if (level == 2 && food[0].getFoodPos().y >= 300 && food[0].getFoodPos().y <= 350 && lives >= 2) {
+        std::cout << "FOOD 0 POS Y: " << food[0].getFoodPos().y << std::endl;
+        Food newFood;
+        food.push_back(newFood);
+        start = std::clock();
+        now = std::clock();
+    }
+    else if (level >= 3) {
+        if (food.size() == 1 && food[0].getFoodPos().y >= 300 && food[0].getFoodPos().y <= 350) {
+            std::cout << "FOOD 0 POS Y: " << food[0].getFoodPos().y << std::endl;
+            Food newFood;
+            food.push_back(newFood);
+            start = std::clock();
+            now = std::clock();
+        }
+        else if (food.size() == 2 && food[1].getFoodPos().y >= 200 && food[1].getFoodPos().y <= 250) {
+            std::cout << "FOOD 1 POS Y: " << food[1].getFoodPos().y << std::endl;
+            Food newFood;
+            food.push_back(newFood);
+            start = std::clock();
+            now = std::clock();
+        }
+    }
 }
 
 void Mechanism::playAgain(RenderWindow& p_window) {
@@ -311,6 +367,7 @@ void Mechanism::playAgain(RenderWindow& p_window) {
                 level = 1;
                 gameRunning = true;
                 startGame = true;
+                shield = false;
                 p_window.loadMusic();
                 p_window.playMusic();
                 playGame(p_window);
@@ -324,12 +381,22 @@ void Mechanism::playAgain(RenderWindow& p_window) {
     }
 }
 
+void Mechanism::renderShield(RenderWindow& p_window) {
+    cleanUp();
+
+    loadMedia(p_window, utilsFilePath.c_str());
+
+    if (shield) {
+        utilsEntities.push_back(Entity(VectorMath(rightDropBorder + boulderWidth * boulderRatio, bottomDropBorder - MAX_BUFF_HEIGHT * buffRatio), shieldRect, loadUtils));
+        p_window.render(utilsEntities[0], buffRatio);
+    }
+}
 
 
 void Mechanism::renderLives(RenderWindow& p_window) {
     cleanUp();
 
-    loadMedia(p_window, livesFilePath.c_str());
+    loadMedia(p_window, utilsFilePath.c_str());
 
     int currentLives = lives;
     for (int i = 0; i < MAX_LIVES; i++) {
@@ -355,13 +422,12 @@ void Mechanism::updateGame(Basket &p_basket, Food &p_food, RenderWindow &p_windo
             Mix_PlayChannel(-1, p_window.getMix_Chunk(4), 0);
             updateScore();
             updateLevel();
-            std::cout << "LEVEL: " << level << std::endl;
             p_food.foodDrop(p_window, FALSE, level);
         }
         else if (p_food.getFoodPos().y >= bottomDropBorder - MAX_FOOD_HEIGHT * foodRatio) {
             Mix_PlayChannel(-1, p_window.getMix_Chunk(5), 0);
-            updateLives();
-            std::cout << "LEVEL: " << level << std::endl;
+            if (shield) shield = false;
+            else updateLives();
             p_food.foodDrop(p_window, FALSE, level);
         }
     }
@@ -374,6 +440,62 @@ void Mechanism::updateGame(Basket &p_basket, Food &p_food, RenderWindow &p_windo
         startGame = false;
     }
 }
+
+void Mechanism::handleBuff(Basket &p_basket, std::vector<Buff> &p_buff, RenderWindow &p_window) {
+    if (p_buff.size() > 0) {
+        int buffLen = p_buff.size();
+        for (int b = 0; b < buffLen; b++) {
+            std::vector<Buff>::iterator buffIt = p_buff.begin() + b;
+            if (p_buff[b].getBuffPos().y >= p_basket.getBasketPos().y) {
+                if (p_buff[b].getBuffPos().x >= p_basket.getBasketPos().x && p_buff[b].getBuffPos().x + MAX_BUFF_WIDTH * buffRatio <= p_basket.getBasketPos().x + basketWidth * basketRatio
+                        && p_buff[b].getBuffPos().y + MAX_BUFF_HEIGHT * buffRatio < bottomDropBorder) {
+                    Mix_PlayChannel(-1, p_window.getMix_Chunk(4), 0);
+                    std::cout << "GOT BUFF" << std::endl;
+                    if (p_buff[b].getBuffNum() == 1) shield = true;
+                    else lives += 1;
+                    p_buff.erase(buffIt);
+                }
+                else if (p_buff[b].getBuffPos().y >= bottomDropBorder - MAX_DEBUFF_HEIGHT * buffRatio) {
+                    Mix_PlayChannel(-1, p_window.getMix_Chunk(5), 0);
+                    std::cout << "MISS BUFF" << std::endl;
+                    p_buff.erase(buffIt);
+                }
+            }
+
+        }
+    }
+}
+
+
+void Mechanism::handleDebuff(Basket &p_basket, std::vector<Debuff> &p_debuff, RenderWindow &p_window) {
+    if (p_debuff.size() > 0) {
+        int debuffLen = p_debuff.size();
+        for (int d = 0; d < debuffLen; d++) {
+            std::vector<Debuff>::iterator debuffIt = p_debuff.begin() + d;
+
+            if (p_debuff[d].getDebuffPos().y >= p_basket.getBasketPos().y) {
+                if (p_debuff[d].getDebuffPos().x >= p_basket.getBasketPos().x && p_debuff[d].getDebuffPos().x + MAX_DEBUFF_WIDTH * debuffRatio <= p_basket.getBasketPos().x + basketWidth * basketRatio
+                        && p_debuff[d].getDebuffPos().y + MAX_DEBUFF_HEIGHT * debuffRatio < bottomDropBorder) {
+                    Mix_PlayChannel(-1, p_window.getMix_Chunk(5), 0);
+                    if (shield) shield = false;
+                    else updateLives();
+                    std::cout << "X_X" << std::endl;
+                    p_debuff.erase(debuffIt);
+                }
+                else if (p_debuff[d].getDebuffPos().y >= bottomDropBorder - MAX_DEBUFF_HEIGHT * foodRatio) {
+                    Mix_PlayChannel(-1, p_window.getMix_Chunk(4), 0);
+                    std::cout << "SAFE" << std::endl;
+                    p_debuff.erase(debuffIt);
+                }
+            }
+        }
+    }
+
+}
+
+
+
+
 
 void Mechanism::renderScores(RenderWindow& p_window) {
     std::vector<int> seperatedScores;

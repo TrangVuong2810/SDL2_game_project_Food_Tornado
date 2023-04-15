@@ -1,7 +1,6 @@
 #include <bits/stdc++.h>
 #include <SDL.h>
 #include <SDL_image.h>
-#include <SDL_ttf.h>
 #include <SDL_mixer.h>
 
 #include "RenderWindow.h"
@@ -31,9 +30,6 @@ int main (int argc, char* argv[]) {
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
         std::cout << "SDL_Init failed. Error: " << SDL_GetError() << std::endl;
     }
-    if( TTF_Init() == -1 ) {
-        std::cout << "SDL_ttf could not initialize! SDL_ttf Error: " << TTF_GetError() << std::endl;
-    }
     if( Mix_OpenAudio( 44100, MIX_DEFAULT_FORMAT, 2, 2048 ) < 0 ) {
         std::cout << "SDL_mixer could not initialize! SDL_mixer Error: " << Mix_GetError() << std::endl;
     }
@@ -56,7 +52,6 @@ int main (int argc, char* argv[]) {
     window._clear();
     window.cleanUp();
 
-    TTF_Quit();
     IMG_Quit();
     SDL_Quit();
     Mix_Quit();

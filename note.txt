@@ -1,9 +1,9 @@
 1. NEED TO BE FIXED:
 
-- ESC/QUIT during inside button doesn't work
 
 2. NEED TO BE ADDED:
 
 - Level system (Optional: Add more level)
     + Basket (faster)
-- Store highest score
+- Store highest score //no space to render high score....
+

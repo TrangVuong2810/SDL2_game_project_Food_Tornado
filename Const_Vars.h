@@ -154,7 +154,7 @@ const double backButtonRatio = 1;
 const bool TRUE = true;
 const bool FALSE = false;
 
-const std::string livesFilePath = {"Utils.png"};
+const std::string utilsFilePath = {"Utils.png"};
 const std::string numbersFilePath = {"Numbers.png"};
 const std::string scoreFilePath = {"Score.png"};
 const std::string gameOverFilePath = {"GameOver.png"};
@@ -176,5 +176,15 @@ const int MAX_LIVES = 3;
 
 
 
+
+
+const double buffRatio = 2;
+const SDL_Rect shieldRect = {16, 16, 16, 16};
+const double MAX_BUFF_HEIGHT = 16;
+const double MAX_BUFF_WIDTH = 16;
+
+const double debuffRatio = 4;
+const double MAX_DEBUFF_HEIGHT = 10;
+const double MAX_DEBUFF_WIDTH = 16;
 
 

@@ -179,6 +179,7 @@ void Menu::handleGameButton(RenderWindow& p_window, SDL_Event& p_event) {
             while (!readingDone) {
                 if (SDL_PollEvent(&p_event) != 0 ) {
                     if (p_event.type == SDL_QUIT) {
+                        quit = true;
                         readingDone = true;
                         cleanMenu();
                     }
@@ -199,7 +200,7 @@ void Menu::handleGameButton(RenderWindow& p_window, SDL_Event& p_event) {
                     else {
                         backButton.currentSprite = BUTTON_MOUSE_OUT;
                     }
-                    do {
+                    //do {
                         //render story
                         p_window._clear();
                         cleanMenu();
@@ -210,7 +211,7 @@ void Menu::handleGameButton(RenderWindow& p_window, SDL_Event& p_event) {
                         render(p_window, fullScreenRatio);
 
 
-                    } while (SDL_PollEvent(&p_event) != 0);
+                    //} while (SDL_PollEvent(&p_event) != 0);
 
                 //loadButtons(p_window);
                 menuEntities.push_back(backButton.buttonEntity());
@@ -249,6 +250,7 @@ void Menu::handleInforButton(RenderWindow& p_window, SDL_Event& p_event) {
             while (!readingDone) {
                 if (SDL_PollEvent(&p_event) != 0) { // && (p_event.type == SDL_MOUSEBUTTONDOWN || p_event.type == SDL_MOUSEMOTION)) {
                     if (p_event.type == SDL_QUIT) {
+                        quit = true;
                         readingDone = true;
                         cleanMenu();
                     }
@@ -268,9 +270,7 @@ void Menu::handleInforButton(RenderWindow& p_window, SDL_Event& p_event) {
                     else {
                         backButton.currentSprite = BUTTON_MOUSE_OUT;
                     }
-                    do {
-
-                        //render instrction
+                    //do {
                         p_window._clear();
                         cleanMenu();
 
@@ -280,7 +280,7 @@ void Menu::handleInforButton(RenderWindow& p_window, SDL_Event& p_event) {
                         render(p_window, fullScreenRatio);
 
 
-                    } while (SDL_PollEvent(&p_event) != 0); // && (p_event.type == SDL_MOUSEBUTTONDOWN || p_event.type == SDL_MOUSEMOTION));
+                    //} while (SDL_PollEvent(&p_event) != 0&& (p_event.type == SDL_MOUSEBUTTONDOWN || p_event.type == SDL_MOUSEMOTION));
 
                 //loadButtons(p_window);
                 menuEntities.push_back(backButton.buttonEntity());
@@ -288,7 +288,6 @@ void Menu::handleInforButton(RenderWindow& p_window, SDL_Event& p_event) {
                 render(p_window, backButtonRatio);
 
                 p_window.display();
-
 
                 }
             }
@@ -315,11 +314,12 @@ void Menu::handleAboutButton(RenderWindow& p_window, SDL_Event& p_event) {
 
             bool readingDone = false;
 
-            SDL_Delay(500);
+            //SDL_Delay(500);
 
             while (!readingDone) {
                 if (SDL_PollEvent(&p_event) != 0 ) {// && (p_event.type == SDL_MOUSEBUTTONDOWN || p_event.type == SDL_MOUSEMOTION)) {
                     if (p_event.type == SDL_QUIT) {
+                        quit = true;
                         readingDone = true;
                         cleanMenu();
                     }
@@ -339,7 +339,7 @@ void Menu::handleAboutButton(RenderWindow& p_window, SDL_Event& p_event) {
                     else {
                         backButton.currentSprite = BUTTON_MOUSE_OUT;
                     }
-                    do {
+                    //do {
 
                         //render credit
                         p_window._clear();
@@ -351,7 +351,7 @@ void Menu::handleAboutButton(RenderWindow& p_window, SDL_Event& p_event) {
                         render(p_window, fullScreenRatio);
 
 
-                    } while (SDL_PollEvent(&p_event) != 0);
+                    //} while (SDL_PollEvent(&p_event) != 0);
 
                 //loadButtons(p_window);
                 menuEntities.push_back(backButton.buttonEntity());
@@ -369,7 +369,6 @@ void Menu::handleAboutButton(RenderWindow& p_window, SDL_Event& p_event) {
     else {
         aboutButton.currentSprite = BUTTON_MOUSE_OUT;
     }
-
 
 }
 
