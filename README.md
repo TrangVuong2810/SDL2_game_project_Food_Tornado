@@ -74,8 +74,6 @@ This is a non-commercial project and it is free to everyone
 
 Feel free to contact the author for support
 
-🌟 LinkIn: [Trang Vuong](https://www.linkedin.com/in/trangvuong2810/)
-
 🌟 GitHub: [TrangVuong2810](https://github.com/TrangVuong2810)
 
 🌟 Email: trangvuong2810@gmail.com
